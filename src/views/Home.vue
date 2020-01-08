@@ -1,17 +1,15 @@
 <template>
   <div class="home">
-    <p>Hello word</p>
-    <ApiConsumption/>
+    <p>Projet Node</p>
+      
   </div>
 </template>
 
 <script>
-import ApiConsumption from '../components/ApiConsumption.vue'
 
 export default {
     name: 'home',
     components: {
-        ApiConsumption
     }
 }
 </script>
