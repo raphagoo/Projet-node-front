@@ -3,7 +3,7 @@
 vueJs starter kit, is my new webapp starter: initialy I was on the React road, but VueJs took its place...
 
 
-[![Dependency Status](https://david-dm.org/psancho/vue-starter/status.svg)](https://david-dm.org/psancho/vue-starter#info=dependencies) [![devDependency Status](https://david-dm.org/psancho/vue-starter/dev-status.svg)](https://david-dm.org/psancho/vue-starter#info=devDependencies)
+[![Dependency Status](https://david-dm.org/raphagoo/Projet-node-front/status.svg)](https://david-dm.org/raphagoo/Projet-node-front#info=dependencies) [![devDependency Status](https://david-dm.org/raphagoo/Projet-node-front/dev-status.svg)](https://david-dm.org/raphagoo/Projet-node-front#info=devDependencies)
 
 Here is a more complete [description](./description.md).
 
