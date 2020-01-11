@@ -1,5 +1,5 @@
 <template>
-    <p class="text-center">Projet Node</p>
+    <router-link to="/" class="text-center">Projet Node</router-link>
 </template>
 
 <script>

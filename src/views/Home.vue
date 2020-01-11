@@ -19,12 +19,12 @@
         <div v-bind:key="ownService._id" v-for="ownService in service.ownService">
             {{ownService.nameService}}
 
-                <md-button class="md-icon-button">
+                <md-button @click="$router.push('/ownService/details')" class="md-icon-button">
                     <md-icon>remove_red_eye</md-icon>
                 </md-button>
 
             <md-button @click="$router.push('/ownService/edit')" class="md-icon-button">
-                <md-icon>edit</md-icon>
+                <md-icon>add</md-icon>
             </md-button>
         </div>
     </div>

@@ -9,11 +9,15 @@ const actions = {
                 name: project.name,
                 desc: project.desc,
                 daysOff: project.daysOff,
-
+                workingHours: project.workingHours,
+                task: project.taskLinked,
+                groupTask: project.groupTask,
+                resources: project.ressourcesLinked,
+                milestones: project.milestones
             })
                 .then(response => {
                     consoleLogger.debug(response)
-                    commit('addRessourceSuccess', response)
+                    commit('addProjectSuccess', response)
                     resolve(response)
                 }, error => {
                     reject(error)
@@ -21,24 +25,24 @@ const actions = {
         })
     },
 
-    getRessources({commit}){
-        api.get('/resource/list')
+    getProjects({commit}){
+        api.get('/project/list')
             .then(response => {
                 consoleLogger.debug(response)
-                commit('getRessourcesSuccess', response)
+                commit('getProjectsSuccess', response)
             })
     }
 };
 
 const mutations = {
-    addRessourceSuccess(state, response){
+    addProjectSuccess(state, response){
         state.all.push(response.data)
     },
-    getRessourcesSuccess(state, response){
+    getProjectsSuccess(state, response){
         state.all = response.data
     }
 };
-export const ressources = {
+export const project = {
     namespaced: true,
     state,
     actions,

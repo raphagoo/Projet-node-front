@@ -35,6 +35,14 @@
                          <md-checkbox v-model="project.daysOff.sa">Saturday</md-checkbox>
                          <md-checkbox v-model="project.daysOff.su">Sunday</md-checkbox>
                         <md-field>
+                            <label>Working Hours : Start</label>
+                            <md-input type="number" step="0.5" min="0" max="23" v-model="project.workingHours.start" required />
+                        </md-field>
+                        <md-field>
+                            <label>Working Hours : End</label>
+                            <md-input type="number" step="0.5" min="0" max="23" v-model="project.workingHours.end" required />
+                        </md-field>
+                        <md-field>
                             <label>Tasks</label>
                             <md-select v-model="project.task" multiple>
                                 <md-option v-bind:key="taskToLink.id" v-for="taskToLink in task.all" :value="taskToLink.id">{{taskToLink.name}}</md-option>
@@ -54,7 +62,7 @@
                         <md-field>
                             <label>Ressources</label>
                             <md-select v-model="project.ressourcesLinked" multiple>
-                                <md-option v-bind:key="ressourcesToLink.id" v-for="ressourcesToLink in ressources.all" :value="ressourcesToLink.id">{{ressourcesToLink.name}} - {{ressourcesToLink.type}}</md-option>
+                                <md-option v-bind:key="ressourcesToLink.id" v-for="ressourcesToLink in ressources.all" :value="ressourcesToLink._id">{{ressourcesToLink.name}} - {{ressourcesToLink.type}}</md-option>
                             </md-select>
                         </md-field>
                         <span class="md-title">Milestone</span>
@@ -98,6 +106,10 @@
                         fr: false,
                         sa: true,
                         su: true
+                    },
+                    workingHours: {
+                        start: null,
+                        end: null
                     },
                     taskLinked: [],
                     groupTask: {
