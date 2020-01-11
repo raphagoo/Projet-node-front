@@ -4,8 +4,15 @@ import logger from 'logger'
 import App from './App.vue'
 import config from 'config'
 import router from './router'
-import store from './store'
+import {store} from './store/index'
 import api from './interfaces/apiInterface'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default-dark.css'
+import VueSimpleAlert from "vue-simple-alert";
+
+Vue.use(VueSimpleAlert);
+Vue.use(VueMaterial);
 
 // prevents from display notice about running in dev mode
 Vue.config.productionTip = false
@@ -21,4 +28,4 @@ new Vue({
     router,
     store,
     render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
