@@ -44,13 +44,13 @@
                         <md-field>
                             <label>Linked Tasks</label>
                             <md-select v-model="task.linkedTask" multiple>
-                                <md-option v-bind:key="taskToLink.id" v-for="taskToLink in project.selected.task" :value="taskToLink.id">{{taskToLink.name}}</md-option>
+                                <md-option v-bind:key="taskToLink.id" v-for="taskToLink in project.selected.task" :value="taskToLink._id">{{taskToLink.name}}</md-option>
                             </md-select>
                         </md-field>
                         <div class="hidden"> {{ressourcesFiltered}} </div>
                         <md-field>
                             <label>Ressources</label>
-                            <md-select v-model="task.resources" multiple>
+                            <md-select v-model="task.ressources" multiple>
                                 <md-option v-bind:key="ressourcesToLink.id" v-for="ressourcesToLink in project.selected.resources" :value="ressourcesToLink._id">{{ressourcesToLink.name}}</md-option>
                             </md-select>
                         </md-field>
@@ -89,7 +89,7 @@
                     percentageProgress: null,
                     color: null,
                     linkedTask: [],
-                    resources: [],
+                    ressources: [],
                 }
             }
         },
@@ -101,13 +101,14 @@
                 updateProject: 'updateProject',
             }),
             submitTask(){
-                this.task.start = Date.parse(this.task.start)
-                this.task.end = Date.parse(this.task.end)
+                console.log(this.task)
+                this.task.start = Date.parse(this.task.start) / 1000
+                this.task.end = Date.parse(this.task.end) / 1000
                 this.addTask(this.task)
                     .then(response => {
                         consoleLogger.debug(this.project.selected)
                         let taskLinked = this.project.selected.task
-                        taskLinked.push(response.data._id)
+                        taskLinked.push(response.data)
                         let updateInfos = {
                             propertyToUpdate: {
                                 task: taskLinked

@@ -16,11 +16,11 @@
             </form>
     </div>
     <div class="serviceContainer" v-if="noService === false">
-        <h1>Votre projet</h1>
+        <h1>Votre service</h1>
         <div v-bind:key="ownService._id" v-for="ownService in service.ownService">
             {{ownService.nameService}}
 
-                <md-button @click="$router.push('/ownService/details')" class="md-icon-button">
+                <md-button @click="seeOwnService(ownService)" class="md-icon-button">
                     <md-icon>remove_red_eye</md-icon>
                 </md-button>
 
@@ -28,13 +28,13 @@
                 <md-icon>add</md-icon>
             </md-button>
         </div>
-        <h2>Autre projets</h2>
+        <h2>Autre services</h2>
         <div v-bind:key="otherService._id" v-for="otherService in service.services">
             {{otherService.nameService}}
+            <md-button @click="seeOtherService(otherService)" class="md-icon-button">
+                <md-icon>remove_red_eye</md-icon>
+            </md-button>
         </div>
-        <md-button @click="clickButton">
-            Test socket
-        </md-button>
     </div>
   </div>
 </template>
@@ -91,6 +91,16 @@ export default {
         clickButton() {
             // $socket is socket.io-client instance
             this.$socket.emit('getUpdate')
+        },
+        seeOtherService(otherService){
+            this.service.selected = otherService
+            this.service.selected.isOwn = false
+            this.$router.push('/ownService/details')
+        },
+        seeOwnService(ownService){
+            this.service.selected = ownService
+            this.service.selected.isOwn = true
+            this.$router.push('/ownService/details')
         },
         submitNewService(){
             this.saveNewService(this.serviceToSave)

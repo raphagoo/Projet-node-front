@@ -30,7 +30,7 @@
                             <label>Type</label>
                             <md-input v-model="ressource.type" required />
                         </md-field>
-                        <md-button type="submit" class="md-button md-raised md-primary">Ajouter</md-button>
+                        <md-button type="submit" class="md-button md-raised md-primary">Sauvegarder</md-button>
                     </form>
                 </md-card-content>
             </md-card-expand-content>
@@ -47,9 +47,21 @@
         computed: {
             ...mapState({
                 project: state => state.project,
+                ressources: state => state.ressources
             }),
         },
-
+        created() {
+            if(this.$route.fullPath.includes('edit') === true){
+                this.ressource = this.ressources.selected
+            }
+            else {
+                this.ressource = {
+                    name: null,
+                    cost: null,
+                    type: null,
+                }
+            }
+        },
         data() {
             return {
                 ressource: {
@@ -62,31 +74,47 @@
         methods: {
             ...mapActions('ressources', {
                 addRessource: 'addRessource',
+                updateRessource: 'updateRessource'
             }),
             ...mapActions('project', {
                 updateProject: 'updateProject',
             }),
-            submitRessource(){
-                this.addRessource(this.ressource)
-                .then(response => {
-                    let ressourcesLinked = this.project.selected.resources
-                    ressourcesLinked.push(response.data._id)
-                    let updateInfos = {
-                        propertyToUpdate: {
-                            resources: ressourcesLinked
-                        },
-                        projectId: this.project.selected._id}
-                    this.updateProject(updateInfos)
-                    .then(response => {
-                        this.$fire({
-                            type: 'success',
-                            text: response.statusText
+            submitRessource() {
+                if (this.$route.fullPath.includes('edit') === false) {
+                    this.addRessource(this.ressource)
+                        .then(response => {
+                            let ressourcesLinked = this.project.selected.resources
+                            ressourcesLinked.push(response.data._id)
+                            let updateInfos = {
+                                propertyToUpdate: {
+                                    resources: ressourcesLinked
+                                },
+                                projectId: this.project.selected._id
+                            }
+                            this.updateProject(updateInfos)
+                                .then(response => {
+                                    this.$fire({
+                                        type: 'success',
+                                        text: response.statusText
+                                    })
+                                    this.$router.push('/project/' + this.project.selected._id)
+                                })
+                        }, error => {
+                            consoleLogger.debug(error)
                         })
-                        this.$router.push('/project/'+this.project.selected._id)
-                    })
-                }, error => {
-                    consoleLogger.debug(error)
-                })
+                }
+                else{
+                    this.updateRessource(this.ressource)
+                        .then(response => {
+                            this.$fire({
+                                type: 'success',
+                                text: response.statusText
+                            })
+                            this.$router.push('/project/' + this.project.selected._id)
+                        }, error => {
+                            consoleLogger.debug(error)
+                        })
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 import api from "../interfaces/apiInterface";
 import consoleLogger from "logger";
-const state = {all: []};
+const state = {all: [], selected: {}};
 
 const actions = {
     addRessource({commit}, ressource){
@@ -26,6 +26,22 @@ const actions = {
                 consoleLogger.debug(response)
                 commit('getRessourcesSuccess', response)
             })
+    },
+    updateRessource({commit}, ressource){
+        return new Promise((resolve, reject) => {
+            api.put('/resource/update/'+ressource._id, {
+                name: ressource.name,
+                cost: ressource.cost,
+                type: ressource.type
+            })
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('updateRessourceSuccess', response)
+                    resolve(response)
+                }, error => {
+                    reject(error)
+                })
+        })
     }
 };
 
@@ -35,6 +51,9 @@ const mutations = {
     },
     getRessourcesSuccess(state, response){
         state.all = response.data
+    },
+    updateRessourceSuccess(){
+
     }
 };
 export const ressources = {

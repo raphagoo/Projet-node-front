@@ -38,8 +38,18 @@ export default new Router({
             component: CardRessource
         },
         {
+            path: '/project/:id/resource/edit',
+            name: 'editResource',
+            component: CardRessource
+        },
+        {
             path: '/project/:id/groupTask/new',
             name: 'newGroupTask',
+            component: CardGroupTask
+        },
+        {
+            path: '/project/:id/groupTask/edit',
+            name: 'editGroupTask',
             component: CardGroupTask
         },
         {
@@ -58,7 +68,7 @@ export default new Router({
             component: listDetailsService
         },
         {
-            path: '/project/:id/gantt',
+            path: '/gantt',
             name: 'gantt',
             component: GanttView
         },

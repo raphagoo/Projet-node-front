@@ -10,7 +10,7 @@
                 <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
                 <md-table-cell md-label="Cost" md-sort-by="cost">{{ item.cost }}</md-table-cell>
                 <md-table-cell md-label="Type" md-sort-by="type">{{ item.type }}</md-table-cell>
-                <md-table-cell><md-button class="md-icon-button"><md-icon>edit</md-icon></md-button></md-table-cell>
+                <md-table-cell><md-button @click="editResource(item)" class="md-icon-button"><md-icon>edit</md-icon></md-button></md-table-cell>
             </md-table-row>
         </md-table>
 
@@ -22,7 +22,7 @@
 
             <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
-                <md-table-cell><md-button class="md-icon-button"><md-icon>edit</md-icon></md-button></md-table-cell>
+                <md-table-cell><md-button @click="editGroupTask(item, item.start, item.end)" class="md-icon-button"><md-icon>edit</md-icon></md-button></md-table-cell>
             </md-table-row>
         </md-table>
 
@@ -66,12 +66,24 @@
         computed: {
             ...mapState({
                 project: state => state.project,
+                ressources: state => state.ressources,
+                groupTask: state => state.groupTask
             }),
         },
             methods: {
                 ...mapActions('project', {
                     getProjectById: 'getProjectById'
-                })
+                }),
+                editResource(resource){
+                    this.ressources.selected = resource
+                    this.$router.push('/project/'+this.project.selected._id+'/resource/edit')
+                },
+                editGroupTask(groupTask, dateStart, dateEnd){
+                    this.groupTask.selected = groupTask
+                    this.groupTask.selected.start = dateStart
+                    this.groupTask.selected.end = dateEnd
+                    this.$router.push('/project/'+this.project.selected._id+'/groupTask/edit')
+                }
             },
         beforeMount() {
             this.getProjectById(this.$route.params.id)

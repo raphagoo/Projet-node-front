@@ -26,6 +26,18 @@ const actions = {
                 consoleLogger.debug(response)
                 commit('getGroupTasksSuccess', response)
             })
+    },
+    updateGroupTask({commit}, groupTask){
+        return new Promise((resolve, reject) => {
+            api.put('/groupTask/update/'+groupTask._id, groupTask)
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('updateGroupTaskSuccess', response)
+                    resolve(response)
+                }, error => {
+                    reject(error)
+                })
+        })
     }
 };
 
@@ -35,6 +47,8 @@ const mutations = {
     },
     getGroupTasksSuccess(state, response){
         state.all = response.data
+    },
+    updateGroupTaskSuccess(){
     }
 };
 export const groupTask = {
