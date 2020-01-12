@@ -8,7 +8,7 @@
             <form class="md-layout" @submit.prevent="submitNewService()">
                 <md-field>
                     <label>Service Name</label>
-                    <md-input v-model="service.name" />
+                    <md-input v-model="serviceToSave.name" />
                 </md-field>
                 <md-button type="submit" class="md-button md-raised md-primary">
                     Save
@@ -16,6 +16,7 @@
             </form>
     </div>
     <div class="serviceContainer" v-if="noService === false">
+        <h1>Votre projet</h1>
         <div v-bind:key="ownService._id" v-for="ownService in service.ownService">
             {{ownService.nameService}}
 
@@ -23,10 +24,17 @@
                     <md-icon>remove_red_eye</md-icon>
                 </md-button>
 
-            <md-button @click="$router.push('/ownService/edit')" class="md-icon-button">
+            <md-button @click="$router.push('/project/new')" class="md-icon-button">
                 <md-icon>add</md-icon>
             </md-button>
         </div>
+        <h2>Autre projets</h2>
+        <div v-bind:key="otherService._id" v-for="otherService in service.services">
+            {{otherService.nameService}}
+        </div>
+        <md-button @click="clickButton">
+            Test socket
+        </md-button>
     </div>
   </div>
 </template>
@@ -44,6 +52,14 @@ export default {
             serviceToSave: {
                 name: null
             }
+        }
+    },
+    sockets: {
+        connect: function () {
+            console.log('socket connected')
+        },
+        update: function (data) {
+            console.log('La data :', data)
         }
     },
     computed: {
@@ -72,6 +88,10 @@ export default {
             getOwnService: 'getOwnService',
             saveNewService: 'saveNewService'
         }),
+        clickButton() {
+            // $socket is socket.io-client instance
+            this.$socket.emit('getUpdate')
+        },
         submitNewService(){
             this.saveNewService(this.serviceToSave)
             .then(

@@ -10,6 +10,17 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css'
 import VueSimpleAlert from "vue-simple-alert";
+import VueSocketIO from 'vue-socket.io'
+
+Vue.use(new VueSocketIO({
+    debug: false,
+    connection: 'http://localhost:3000/',
+    vuex: {
+        store,
+        actionPrefix: 'SOCKET_',
+        mutationPrefix: 'SOCKET_'
+    }
+}))
 
 Vue.use(VueSimpleAlert);
 Vue.use(VueMaterial);

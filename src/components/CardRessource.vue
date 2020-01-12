@@ -39,31 +39,50 @@
 </template>
 
 <script>
-    import {mapActions} from "vuex";
+    import {mapActions, mapState} from "vuex";
     import consoleLogger from "logger";
 
     export default {
         name: "CardRessource",
+        computed: {
+            ...mapState({
+                project: state => state.project,
+            }),
+        },
 
         data() {
             return {
                 ressource: {
                     name: null,
                     cost: null,
-                    type: null
-                }
+                    type: null,
+                },
             }
         },
         methods: {
             ...mapActions('ressources', {
                 addRessource: 'addRessource',
             }),
+            ...mapActions('project', {
+                updateProject: 'updateProject',
+            }),
             submitRessource(){
                 this.addRessource(this.ressource)
                 .then(response => {
-                    this.$fire({
-                        type: 'success',
-                        text: response.statusText
+                    let ressourcesLinked = this.project.selected.resources
+                    ressourcesLinked.push(response.data._id)
+                    let updateInfos = {
+                        propertyToUpdate: {
+                            resources: ressourcesLinked
+                        },
+                        projectId: this.project.selected._id}
+                    this.updateProject(updateInfos)
+                    .then(response => {
+                        this.$fire({
+                            type: 'success',
+                            text: response.statusText
+                        })
+                        this.$router.push('/project/'+this.project.selected._id)
                     })
                 }, error => {
                     consoleLogger.debug(error)

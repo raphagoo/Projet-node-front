@@ -1,19 +1,20 @@
 import api from "../interfaces/apiInterface";
 import consoleLogger from "logger";
-const state = {all: []};
+const state = {all: [], selected: {}};
 
 const actions = {
     addProject({commit}, project){
+        consoleLogger.debug("daysOff:", project.daysOff)
         return new Promise((resolve, reject) => {
             api.post('/project/create', {
                 name: project.name,
                 desc: project.desc,
                 daysOff: project.daysOff,
                 workingHours: project.workingHours,
-                task: project.taskLinked,
-                groupTask: project.groupTask,
-                resources: project.ressourcesLinked,
-                milestones: project.milestones
+                taskLinked: [],
+                ressourcesLinked: [],
+                groupTaskLinked: [],
+                milestoneLinked: []
             })
                 .then(response => {
                     consoleLogger.debug(response)
@@ -31,6 +32,26 @@ const actions = {
                 consoleLogger.debug(response)
                 commit('getProjectsSuccess', response)
             })
+    },
+    getProjectById({commit}, id){
+        api.get('/project/get/'+id)
+            .then(response => {
+                consoleLogger.debug(response)
+                commit('getProjectByIdSuccess', response)
+            })
+    },
+    updateProject({commit}, updateInfos){
+        let property = updateInfos.propertyToUpdate
+        return new Promise((resolve, reject) => {
+            api.put('/project/update/' + updateInfos.projectId, property)
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('updateProjectSuccess')
+                    resolve(response)
+                }, error => {
+                    reject(error)
+                })
+        })
     }
 };
 
@@ -40,6 +61,12 @@ const mutations = {
     },
     getProjectsSuccess(state, response){
         state.all = response.data
+    },
+    getProjectByIdSuccess(state, response){
+        state.selected = response.data
+    },
+    updateProjectSuccess(){
+
     }
 };
 export const project = {

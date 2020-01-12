@@ -1,6 +1,6 @@
 import api from '../interfaces/apiInterface'
 import consoleLogger from "logger";
-const state = {ownService: {}};
+const state = {ownService: {}, services: []};
 
 const actions = {
     getOwnService({commit}){
@@ -37,6 +37,12 @@ const mutations = {
     },
     saveNewServiceSuccess(state, response){
         state.ownService = response.data
+    },
+    "SOCKET_update"(state, data){
+        state.services = [];
+        data.forEach(service => {
+            state.services.push(service)
+        })
     }
 };
 export const service = {

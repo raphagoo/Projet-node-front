@@ -1,40 +1,43 @@
 import api from "../interfaces/apiInterface";
 import consoleLogger from "logger";
-
 const state = {all: []};
 
 const actions = {
-    addTask({commit}, task){
-
+    addGroupTask({commit}, groupTask){
         return new Promise((resolve, reject) => {
-            api.post('/task/create', task)
+            api.post('/groupTask/create', {
+                name: groupTask.name,
+                start: groupTask.start,
+                end: groupTask.end
+            })
                 .then(response => {
                     consoleLogger.debug(response)
-                    commit('addTaskSuccess', response)
+                    commit('addGroupTaskSuccess', response)
                     resolve(response)
                 }, error => {
                     reject(error)
                 })
         })
     },
-    getTasks({commit}){
-        api.get('/task/list')
+
+    getGroupTasks({commit}){
+        api.get('/groupTask/list')
             .then(response => {
                 consoleLogger.debug(response)
-                commit('getTasksSuccess', response)
+                commit('getGroupTasksSuccess', response)
             })
     }
 };
 
 const mutations = {
-    addTaskSuccess(state, response){
+    addGroupTaskSuccess(state, response){
         state.all.push(response.data)
     },
-    getTasksSuccess(state, response){
+    getGroupTasksSuccess(state, response){
         state.all = response.data
     }
 };
-export const task = {
+export const groupTask = {
     namespaced: true,
     state,
     actions,

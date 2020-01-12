@@ -44,14 +44,14 @@
                         <md-field>
                             <label>Linked Tasks</label>
                             <md-select v-model="task.linkedTask" multiple>
-                                <md-option v-bind:key="taskToLink.id" v-for="taskToLink in tasks" :value="taskToLink.id">{{taskToLink.name}}</md-option>
+                                <md-option v-bind:key="taskToLink.id" v-for="taskToLink in project.selected.task" :value="taskToLink.id">{{taskToLink.name}}</md-option>
                             </md-select>
                         </md-field>
                         <div class="hidden"> {{ressourcesFiltered}} </div>
                         <md-field>
                             <label>Ressources</label>
-                            <md-select v-model="task.ressources" multiple>
-                                <md-option v-bind:key="ressourcesToLink.id" v-for="ressourcesToLink in ressourcesFiltered" :value="ressourcesToLink._id">{{ressourcesToLink.name}}</md-option>
+                            <md-select v-model="task.resources" multiple>
+                                <md-option v-bind:key="ressourcesToLink.id" v-for="ressourcesToLink in project.selected.resources" :value="ressourcesToLink._id">{{ressourcesToLink.name}}</md-option>
                             </md-select>
                         </md-field>
                         <md-button type="submit" class="md-button md-raised md-primary">Ajouter</md-button>
@@ -72,7 +72,8 @@
         computed: {
             ...mapState({
                 ressources: state => state.ressources,
-                tasks: state => state.tasks
+                tasks: state => state.tasks,
+                project: state => state.project
             }),
             ressourcesFiltered(){
                 return this.$store.state.ressources.all
@@ -88,27 +89,42 @@
                     percentageProgress: null,
                     color: null,
                     linkedTask: [],
-                    ressources: []
+                    resources: [],
                 }
             }
         },
         methods: {
-                ...mapActions('task', {
-                    addTask: 'addTask',
-                }),
-                submitTask(){
-                    this.task.start =  Date.parse(this.task.start)
-                    this.task.end =  Date.parse(this.task.end)
-                    this.addTask(this.task)
-                        .then(response => {
-                            this.$fire({
-                                type: 'success',
-                                text: response.statusText
+            ...mapActions('task', {
+                addTask: 'addTask',
+            }),
+            ...mapActions('project', {
+                updateProject: 'updateProject',
+            }),
+            submitTask(){
+                this.task.start = Date.parse(this.task.start)
+                this.task.end = Date.parse(this.task.end)
+                this.addTask(this.task)
+                    .then(response => {
+                        consoleLogger.debug(this.project.selected)
+                        let taskLinked = this.project.selected.task
+                        taskLinked.push(response.data._id)
+                        let updateInfos = {
+                            propertyToUpdate: {
+                                task: taskLinked
+                            },
+                            projectId: this.project.selected._id}
+                        this.updateProject(updateInfos)
+                            .then(response => {
+                                this.$fire({
+                                    type: 'success',
+                                    text: response.statusText
+                                })
+                                this.$router.push('/project/'+this.project.selected._id)
                             })
-                        }, error => {
-                            consoleLogger.debug(error)
-                        })
-                }
+                    }, error => {
+                        consoleLogger.debug(error)
+                    })
+            }
         }
     }
 </script>

@@ -1,40 +1,42 @@
 import api from "../interfaces/apiInterface";
 import consoleLogger from "logger";
-
 const state = {all: []};
 
 const actions = {
-    addTask({commit}, task){
-
+    addMilestone({commit}, milestone){
         return new Promise((resolve, reject) => {
-            api.post('/task/create', task)
+            api.post('/milestones/create', {
+                name: milestone.name,
+                date: milestone.date,
+            })
                 .then(response => {
                     consoleLogger.debug(response)
-                    commit('addTaskSuccess', response)
+                    commit('addMilestoneSuccess', response)
                     resolve(response)
                 }, error => {
                     reject(error)
                 })
         })
     },
-    getTasks({commit}){
-        api.get('/task/list')
+
+    getMilestones({commit}){
+        api.get('/milestones/list')
             .then(response => {
                 consoleLogger.debug(response)
-                commit('getTasksSuccess', response)
+                commit('getMilestonesSuccess', response)
             })
     }
 };
 
 const mutations = {
-    addTaskSuccess(state, response){
+    addMilestoneSuccess(state, response){
         state.all.push(response.data)
     },
-    getTasksSuccess(state, response){
+    getMilestonesSuccess(state, response){
         state.all = response.data
     }
 };
-export const task = {
+export const milestone = {
     namespaced: true,
     state,
     actions,
