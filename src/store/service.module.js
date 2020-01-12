@@ -28,6 +28,19 @@ const actions = {
                     reject(error)
                 })
         })
+    },
+    updateService({commit}, updateInfos){
+        let property = updateInfos.propertyToUpdate
+        return new Promise((resolve, reject) => {
+            api.put('/service/update/' + updateInfos.serviceId, property)
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('updateServiceSuccess')
+                    resolve(response)
+                }, error => {
+                    reject(error)
+                })
+        })
     }
 };
 
@@ -43,6 +56,9 @@ const mutations = {
         data.forEach(service => {
             state.services.push(service)
         })
+    },
+    updateServiceSuccess(){
+
     }
 };
 export const service = {

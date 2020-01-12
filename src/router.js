@@ -9,6 +9,7 @@ import CardRessource from "./components/CardRessource.vue";
 import CardGroupTask from "./components/CardGroupTask.vue";
 import CardMilestone from "./components/CardMilestone.vue";
 import CardTask from "./components/CardTask.vue";
+import GanttView from "./views/GanttView.vue";
 
 Vue.use(Router);
 
@@ -55,6 +56,11 @@ export default new Router({
             path: '/ownService/details',
             name: 'details',
             component: listDetailsService
+        },
+        {
+            path: '/project/:id/gantt',
+            name: 'gantt',
+            component: GanttView
         },
         {
             path: '*',

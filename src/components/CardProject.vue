@@ -39,6 +39,7 @@
         name: "CardProject",
         computed: {
             ...mapState({
+                service: state => state.service,
                 ressources: state => state.ressources,
                 task: state => state.task,
                 groupTask: state => state.groupTask,
@@ -74,14 +75,28 @@
             ...mapActions('project', {
                 addProject: 'addProject',
             }),
+            ...mapActions('service', {
+                updateService: 'updateService',
+            }),
             submitProject(){
                 this.addProject(this.project)
                     .then(response => {
-                        this.$fire({
-                            type: 'success',
-                            text: response.statusText
-                        })
-                        this.$router.push('/project/edit/'+response.data._id)
+                        consoleLogger.debug(this.service.ownService[0].projects)
+                        let projectLinked = this.service.ownService[0].projects
+                        projectLinked.push(response.data._id)
+                        let updateInfos = {
+                            propertyToUpdate: {
+                                projects: projectLinked
+                            },
+                            serviceId: this.service.ownService[0]._id}
+                        this.updateService(updateInfos)
+                            .then(response => {
+                                this.$fire({
+                                    type: 'success',
+                                    text: response.statusText
+                                })
+                                this.$router.push('/ownService/details')
+                            })
                     }, error => {
                         consoleLogger.debug(error)
                     })

@@ -12,7 +12,7 @@
                 <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
                 <md-table-cell>
                     <router-link :to="{ name: 'projectEdit', params: { id: item._id } }"><md-button class="md-icon-button"><md-icon>edit</md-icon></md-button></router-link>
-                    <md-button class="md-icon-button"><md-icon>bar_chart</md-icon></md-button>
+                    <router-link :to="{ name: 'gantt', params: { id: item._id } }"><md-button class="md-icon-button"><md-icon>bar_chart</md-icon></md-button></router-link>
                 </md-table-cell>
             </md-table-row>
         </md-table>

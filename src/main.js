@@ -11,7 +11,6 @@ import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default-dark.css'
 import VueSimpleAlert from "vue-simple-alert";
 import VueSocketIO from 'vue-socket.io'
-
 Vue.use(new VueSocketIO({
     debug: false,
     connection: 'http://localhost:3000/',
