@@ -40,6 +40,7 @@ const actions = {
         api.delete('/task/delete/' + task._id,)
             .then(response => {
                 consoleLogger.debug(response)
+                commit('project/deleteTaskFromSelected', task, {root: true })
                 commit('deleteTaskSuccess', task)
             }, error => {
                 consoleLogger.debug(error)

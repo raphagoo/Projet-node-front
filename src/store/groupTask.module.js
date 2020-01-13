@@ -43,6 +43,7 @@ const actions = {
         api.delete('/groupTask/delete/' + groupTask._id,)
             .then(response => {
                 consoleLogger.debug(response)
+                commit('project/deleteGroupTaskFromSelected', groupTask, {root: true })
                 commit('deleteGroupTaskSuccess', groupTask)
             }, error => {
                 consoleLogger.debug(error)

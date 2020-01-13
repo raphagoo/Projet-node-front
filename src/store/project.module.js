@@ -4,7 +4,6 @@ const state = {all: [], selected: {}};
 
 const actions = {
     addProject({commit}, project){
-        consoleLogger.debug("daysOff:", project.daysOff)
         return new Promise((resolve, reject) => {
             api.post('/project/create', {
                 name: project.name,
@@ -52,6 +51,16 @@ const actions = {
                     reject(error)
                 })
         })
+    },
+    deleteProject({commit}, project) {
+        api.delete('/project/delete/' + project._id,)
+            .then(response => {
+                consoleLogger.debug(response)
+                commit('service/deleteFromServiceSelected', project, { root: true })
+                commit('deleteProjectSuccess', project)
+            }, error => {
+                consoleLogger.debug(error)
+            })
     }
 };
 
@@ -67,6 +76,21 @@ const mutations = {
     },
     updateProjectSuccess(){
 
+    },
+    deleteProjectSuccess(state, project){
+        state.all = state.all.filter(projectEach => projectEach._id !== project._id)
+    },
+    deleteRessourceFromSelected(state, resource){
+        state.selected.resources = state.selected.resources.filter(ressource => ressource._id !== resource._id)
+    },
+    deleteGroupTaskFromSelected(state, groupTask){
+        state.selected.groupTask = state.selected.groupTask.filter(groupTaskEach => groupTaskEach._id !== groupTask._id)
+    },
+    deleteMilestoneFromSelected(state, milestone){
+        state.selected.milestones = state.selected.milestones.filter(milestoneEach => milestoneEach._id !== milestone._id)
+    },
+    deleteTaskFromSelected(state, task){
+        state.selected.task = state.selected.task.filter(tasks => tasks._id !== task._id)
     }
 };
 export const project = {

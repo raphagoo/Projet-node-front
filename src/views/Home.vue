@@ -2,16 +2,16 @@
   <div class="home">
     <Header/>
     <md-card class="noServiceContainer" v-if="noService === true">
-            No service created !
+            Pas de service créé !
             <br><br>
-            New Service
+            Nouveau service
             <form class="md-layout" @submit.prevent="submitNewService()">
                 <md-field>
-                    <label>Service Name</label>
+                    <label>Nom du service</label>
                     <md-input v-model="serviceToSave.name" />
                 </md-field>
                 <md-button type="submit" class="md-button md-raised md-primary">
-                    Save
+                    Sauvegarder
                 </md-button>
             </form>
     </md-card>

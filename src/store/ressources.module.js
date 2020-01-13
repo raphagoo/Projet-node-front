@@ -47,6 +47,7 @@ const actions = {
             api.delete('/resource/delete/' + resource._id,)
                 .then(response => {
                     consoleLogger.debug(response)
+                    commit('project/deleteRessourceFromSelected', resource, {root: true })
                     commit('deleteRessourceSuccess', resource)
                 }, error => {
                     consoleLogger.debug(error)

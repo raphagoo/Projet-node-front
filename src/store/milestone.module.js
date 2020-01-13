@@ -42,6 +42,7 @@ const actions = {
         api.delete('/milestones/delete/' + milestone._id,)
             .then(response => {
                 consoleLogger.debug(response)
+                commit('project/deleteMilestoneFromSelected', milestone, {root: true })
                 commit('deleteMilestoneSuccess', milestone)
             }, error => {
                 consoleLogger.debug(error)

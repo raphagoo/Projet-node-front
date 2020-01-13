@@ -95,7 +95,7 @@
                                     type: 'success',
                                     text: response.statusText
                                 })
-                                this.$router.push('/ownService/details')
+                                this.$router.push('/')
                             })
                     }, error => {
                         consoleLogger.debug(error)

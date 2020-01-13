@@ -59,6 +59,9 @@ const mutations = {
     },
     updateServiceSuccess(){
 
+    },
+    deleteFromServiceSelected(state, project){
+        state.selected.projects = state.selected.projects.filter(projectEach => projectEach._id !== project._id)
     }
 };
 export const service = {

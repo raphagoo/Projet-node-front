@@ -6,6 +6,7 @@
         <md-table class="tableDetails" :value="service.selected.projects" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
             <md-table-toolbar>
                 <h1 class="md-title">Project</h1>
+                <md-button @click="getProjects" class="md-button md-raised md-primary">Refresh</md-button>
             </md-table-toolbar>
 
             <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -13,6 +14,7 @@
                 <md-table-cell>
                     <router-link v-if="service.selected.isOwn === true" :to="{ name: 'projectEdit', params: { id: item._id } }"><md-button class="md-icon-button"><md-icon>edit</md-icon></md-button></router-link>
                     <md-button @click="seeOthersGantt(item)" class="md-icon-button"><md-icon>bar_chart</md-icon></md-button>
+                    <md-button @click="deleteProject(item)" class="md-icon-button"><md-icon>delete</md-icon></md-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>
@@ -30,7 +32,8 @@
         },
         methods: {
             ...mapActions('project', {
-                getProjects: 'getProjects'
+                getProjects: 'getProjects',
+                deleteProject: 'deleteProject'
             }),
             seeOthersGantt(project){
                 this.project.selected = project
