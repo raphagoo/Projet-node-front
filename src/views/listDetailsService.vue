@@ -14,7 +14,7 @@
                 <md-table-cell>
                     <router-link v-if="service.selected.isOwn === true" :to="{ name: 'projectEdit', params: { id: item._id } }"><md-button class="md-icon-button"><md-icon>edit</md-icon></md-button></router-link>
                     <md-button @click="seeOthersGantt(item)" class="md-icon-button"><md-icon>bar_chart</md-icon></md-button>
-                    <md-button @click="deleteProject(item)" class="md-icon-button"><md-icon>delete</md-icon></md-button>
+                    <md-button v-if="service.selected.isOwn === true" @click="deleteProject(item)" class="md-icon-button"><md-icon>delete</md-icon></md-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>

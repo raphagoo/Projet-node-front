@@ -54,18 +54,6 @@ export default {
             }
         }
     },
-    sockets: {
-        connect: function () {
-            consoleLogger.info('socket connected')
-        },
-        update: function (data) {
-            consoleLogger.info('La data:', data)
-            this.$fire({
-                type: 'success',
-                text: 'Update réussie !'
-            })
-        }
-    },
     computed: {
         ...mapState({
             service: state => state.service,
