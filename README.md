@@ -20,7 +20,7 @@ Here is a more complete [description](./description.md).
 git clone git@github.com:raphagoo/Projet-node-front.git projet-node-front
 
 # change directory to your app
-cd vue-starter
+cd projet-node-front
 
 # install the dependencies with npm
 npm i
