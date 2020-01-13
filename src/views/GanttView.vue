@@ -1,6 +1,7 @@
 <template>
     <div>
-        <gantt-elastic :tasks="formattedTasks" :options="options" :dynamic-style="dynamicStyle">
+        <router-link to="/" class="text-center"><md-button class="md-icon-button"><md-icon>home</md-icon></md-button></router-link>
+        <gantt-elastic :tasks="taskFormatted" :options="options" :dynamic-style="dynamicStyle">
             <gantt-header slot="header"></gantt-header>
         </gantt-elastic>
     </div>
@@ -11,6 +12,29 @@
     import Header from '../../node_modules/gantt-elastic-header/src/Header.vue';
     import {mapState} from "vuex";
     export default {
+        created() {
+            this.project.selected.task.forEach(taskSelected => {
+                taskSelected.start = new Date(taskSelected.start * 1000)
+                taskSelected.end = new Date(taskSelected.end * 1000)
+                taskSelected.label = taskSelected.desc
+                taskSelected.progress = taskSelected.percentageProgress
+                if(taskSelected.ressources[0])
+                {
+                    taskSelected.user = taskSelected.ressources[0].name
+                }
+                else{
+                    taskSelected.user = "Inconnu"
+                }
+                taskSelected.type = 'task';
+                taskSelected.style = {
+                    base: {
+                        fill: taskSelected.color,
+                        stroke: taskSelected.color
+                    }
+                }
+                this.taskFormatted.push(taskSelected)
+            })
+        },
         computed: {
             ...mapState({
                 service: state => state.service,
@@ -19,39 +43,20 @@
                 task: state => state.task,
                 groupTask: state => state.groupTask,
                 milestone: state => state.milestone
-            }),
-            formattedTasks(){
-                let taskFormatted = [];
-                this.project.selected.task.forEach(taskSelected => {
-                    taskSelected.start = new Date(taskSelected.start * 1000)
-                    taskSelected.end = new Date(taskSelected.end * 1000)
-                    taskSelected.label = taskSelected.name
-                    taskSelected.progress = taskSelected.percentageProgress
-                    taskSelected.user = taskSelected.resources
-                    taskSelected.type = 'task'
-                    taskSelected.style = {
-                        base: {
-                            fill: taskSelected.color,
-                            stroke: taskSelected.color
-                        }
-                    }
-                    console.log(taskSelected)
-                    taskFormatted.push(taskSelected)
-                })
-                return taskFormatted
-            }
+            })
         },
         data(){
             return {
+                taskFormatted:[],
                 options: {
                     maxRows: 100,
                     maxHeight: 300,
                     title: {
-                        label: 'Your project title as html (link or whatever...)',
+                        label: 'Mon gantt',
                         html: false
                     },
                     row: {
-                        height: 24
+                        height: 50
                     },
                     calendar: {
                         hour: {
@@ -65,7 +70,57 @@
                         expander: {
                             display: true
                         }
-                    }
+                    },
+                    taskList: {
+                        expander: {
+                            straight: false
+                        },
+                        columns: [
+                            {
+                                id: 1,
+                                label: "ID",
+                                value: "id",
+                                width: 40
+                            },
+                            {
+                                id: 2,
+                                label: "Description",
+                                value: "label",
+                                width: 200,
+                                expander: true,
+                                html: true,
+                            },
+                            {
+                                id: 3,
+                                label: "Assigné à",
+                                value: "user",
+                                width: 130,
+                                html: true
+                            },
+                            {
+                                id: 4,
+                                label: "Type",
+                                value: "type",
+                                width: 68
+                            },
+                            {
+                                id: 5,
+                                label: "Pourcentage réalisé",
+                                value: "progress",
+                                width: 35,
+                                style: {
+                                    "task-list-header-label": {
+                                        "text-align": "center",
+                                        width: "100%"
+                                    },
+                                    "task-list-item-value-container": {
+                                        "text-align": "center",
+                                        width: "100%"
+                                    }
+                                }
+                            }
+                        ]
+                    },
                 },
                 dynamicStyle: {
                     'task-list-header-label': {

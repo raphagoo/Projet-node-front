@@ -58,8 +58,18 @@ export default new Router({
             component: CardMilestone
         },
         {
+            path: '/project/:id/milestone/edit',
+            name: 'editMilestone',
+            component: CardMilestone
+        },
+        {
             path: '/project/:id/task/new',
             name: 'newTask',
+            component: CardTask
+        },
+        {
+            path: '/project/:id/task/edit',
+            name: 'editTask',
             component: CardTask
         },
         {

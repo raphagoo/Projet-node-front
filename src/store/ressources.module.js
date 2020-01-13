@@ -42,6 +42,15 @@ const actions = {
                     reject(error)
                 })
         })
+    },
+    deleteResource({commit}, resource) {
+            api.delete('/resource/delete/' + resource._id,)
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('deleteRessourceSuccess', resource)
+                }, error => {
+                    consoleLogger.debug(error)
+                })
     }
 };
 
@@ -54,6 +63,9 @@ const mutations = {
     },
     updateRessourceSuccess(){
 
+    },
+    deleteRessourceSuccess(state, resource){
+        state.all = state.all.filter(ressource => ressource._id !== resource._id)
     }
 };
 export const ressources = {

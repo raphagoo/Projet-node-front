@@ -1,6 +1,6 @@
 <template>
     <div>
-        <router-link to="/" class="text-center">Projet Node</router-link>
+        <router-link to="/" class="text-center"><md-button class="md-icon-button"><md-icon>home</md-icon></md-button></router-link>
         <md-button @click="clickButton" class="md-icon-button">
             <md-icon>refresh</md-icon>
         </md-button>
@@ -8,6 +8,8 @@
 </template>
 
 <script>
+    import consoleLogger from "logger";
+
     export default {
         name: "Header",
         sockets: {
@@ -20,6 +22,7 @@
         },
         methods: {
             clickButton() {
+                consoleLogger.debug("Envoi du getUpdate")
                 // $socket is socket.io-client instance
                 this.$socket.emit('getUpdate')
             },

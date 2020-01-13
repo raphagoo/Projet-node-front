@@ -20,37 +20,37 @@
                     <form @submit.prevent="submitTask()">
                         <md-field>
                             <label>Name</label>
-                            <md-input v-model="task.name" required />
+                            <md-input v-model="taskToSend.name" required />
                         </md-field>
                         <md-field>
                             <label>Description</label>
-                            <md-input type="textarea" v-model="task.desc" required />
+                            <md-input type="textarea" v-model="taskToSend.desc" required />
                         </md-field>
-                        <md-datepicker v-model="task.start" required>
+                        <md-datepicker v-model="taskToSend.start" required>
                             <label>Date Start</label>
                         </md-datepicker>
-                        <md-datepicker v-model="task.end" required>
+                        <md-datepicker v-model="taskToSend.end" required>
                             <label>Date End</label>
                         </md-datepicker>
                         <md-field>
                             <label>Percentage progress (%)</label>
-                            <md-input type="number" v-model="task.percentageProgress" required />
+                            <md-input type="number" max="100" min="0" v-model="taskToSend.percentageProgress" required />
                         </md-field>
-                        <ColorPicker :width="300" :height="300" :disabled="false" startColor="#ff0000" v-model="task.color"></ColorPicker>
+                        <ColorPicker :width="300" :height="300" :disabled="false" startColor="#ff0000" v-model="taskToSend.color"></ColorPicker>
                         <md-field>
                             <label>Color</label>
-                            <md-input v-model="task.color" required />
+                            <md-input v-model="taskToSend.color" required />
                         </md-field>
                         <md-field>
                             <label>Linked Tasks</label>
-                            <md-select v-model="task.linkedTask" multiple>
+                            <md-select v-model="taskToSend.linkedTask" multiple>
                                 <md-option v-bind:key="taskToLink.id" v-for="taskToLink in project.selected.task" :value="taskToLink._id">{{taskToLink.name}}</md-option>
                             </md-select>
                         </md-field>
                         <div class="hidden"> {{ressourcesFiltered}} </div>
                         <md-field>
                             <label>Ressources</label>
-                            <md-select v-model="task.ressources" multiple>
+                            <md-select v-model="taskToSend.ressources" multiple>
                                 <md-option v-bind:key="ressourcesToLink.id" v-for="ressourcesToLink in project.selected.resources" :value="ressourcesToLink._id">{{ressourcesToLink.name}}</md-option>
                             </md-select>
                         </md-field>
@@ -69,10 +69,28 @@
     export default {
         name: "CardTask",
         components: {ColorPicker},
+        created() {
+            if(this.$route.fullPath.includes('edit') === true){
+                this.taskToSend = this.task.selected
+                console.log(this.taskToSend)
+            }
+            else {
+                this.taskToSend = {
+                    name: null,
+                    desc: null,
+                    start: null,
+                    end: null,
+                    percentageProgress: null,
+                    color: null,
+                    linkedTask: [],
+                    ressources: [],
+                }
+            }
+        },
         computed: {
             ...mapState({
                 ressources: state => state.ressources,
-                tasks: state => state.tasks,
+                task: state => state.task,
                 project: state => state.project
             }),
             ressourcesFiltered(){
@@ -81,7 +99,7 @@
         },
         data(){
             return{
-                task: {
+                taskToSend: {
                     name: null,
                     desc: null,
                     start: null,
@@ -96,35 +114,50 @@
         methods: {
             ...mapActions('task', {
                 addTask: 'addTask',
+                updateTask: 'updateTask'
             }),
             ...mapActions('project', {
                 updateProject: 'updateProject',
             }),
             submitTask(){
-                console.log(this.task)
-                this.task.start = Date.parse(this.task.start) / 1000
-                this.task.end = Date.parse(this.task.end) / 1000
-                this.addTask(this.task)
-                    .then(response => {
-                        consoleLogger.debug(this.project.selected)
-                        let taskLinked = this.project.selected.task
-                        taskLinked.push(response.data)
-                        let updateInfos = {
-                            propertyToUpdate: {
-                                task: taskLinked
-                            },
-                            projectId: this.project.selected._id}
-                        this.updateProject(updateInfos)
-                            .then(response => {
-                                this.$fire({
-                                    type: 'success',
-                                    text: response.statusText
+                this.taskToSend.start = Date.parse(this.taskToSend.start) / 1000
+                this.taskToSend.end = Date.parse(this.taskToSend.end) / 1000
+                if (this.$route.fullPath.includes('edit') === false) {
+                    this.addTask(this.taskToSend)
+                        .then(response => {
+                            consoleLogger.debug(this.project.selected)
+                            let taskLinked = this.project.selected.task
+                            taskLinked.push(response.data)
+                            let updateInfos = {
+                                propertyToUpdate: {
+                                    task: taskLinked
+                                },
+                                projectId: this.project.selected._id
+                            }
+                            this.updateProject(updateInfos)
+                                .then(response => {
+                                    this.$fire({
+                                        type: 'success',
+                                        text: response.statusText
+                                    })
+                                    this.$router.push('/project/' + this.project.selected._id)
                                 })
-                                this.$router.push('/project/'+this.project.selected._id)
+                        }, error => {
+                            consoleLogger.debug(error)
+                        })
+                }
+                else{
+                    this.updateTask(this.taskToSend)
+                        .then(response => {
+                            this.$fire({
+                                type: 'success',
+                                text: response.statusText
                             })
-                    }, error => {
-                        consoleLogger.debug(error)
-                    })
+                            this.$router.push('/project/' + this.project.selected._id)
+                        }, error => {
+                            consoleLogger.debug(error)
+                        })
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Header/>
-    <div class="noServiceContainer" v-if="noService === true">
+    <md-card class="noServiceContainer" v-if="noService === true">
             No service created !
             <br><br>
             New Service
@@ -14,8 +14,8 @@
                     Save
                 </md-button>
             </form>
-    </div>
-    <div class="serviceContainer" v-if="noService === false">
+    </md-card>
+    <md-card class="serviceContainer" v-if="noService === false">
         <h1>Votre service</h1>
         <div v-bind:key="ownService._id" v-for="ownService in service.ownService">
             {{ownService.nameService}}
@@ -35,7 +35,7 @@
                 <md-icon>remove_red_eye</md-icon>
             </md-button>
         </div>
-    </div>
+    </md-card>
   </div>
 </template>
 
@@ -60,6 +60,10 @@ export default {
         },
         update: function (data) {
             console.log('La data :', data)
+            this.$fire({
+                type: 'success',
+                text: 'Update réussie !'
+            })
         }
     },
     computed: {
@@ -88,10 +92,6 @@ export default {
             getOwnService: 'getOwnService',
             saveNewService: 'saveNewService'
         }),
-        clickButton() {
-            // $socket is socket.io-client instance
-            this.$socket.emit('getUpdate')
-        },
         seeOtherService(otherService){
             this.service.selected = otherService
             this.service.selected.isOwn = false

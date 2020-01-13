@@ -20,9 +20,9 @@
                     <form @submit.prevent="submitMilestone()">
                         <md-field>
                             <label>Name</label>
-                            <md-input v-model="milestone.name" required />
+                            <md-input v-model="milestoneToSend.name" required />
                         </md-field>
-                        <md-datepicker v-model="milestone.date" required>
+                        <md-datepicker v-model="milestoneToSend.date" required>
                             <label>Date</label>
                         </md-datepicker>
                         <md-button type="submit" class="md-button md-raised md-primary">Ajouter</md-button>
@@ -42,11 +42,24 @@
         computed: {
             ...mapState({
                 project: state => state.project,
+                milestone: state => state.milestone
             }),
+        },
+        created() {
+            if(this.$route.fullPath.includes('edit') === true){
+                this.milestoneToSend = this.milestone.selected
+                console.log(this.milestoneToSend)
+            }
+            else {
+                this.milestoneToSend = {
+                    name: null,
+                    date: null,
+                }
+            }
         },
         data() {
             return {
-                milestone: {
+                milestoneToSend: {
                     name: null,
                     date: null,
                 }
@@ -55,33 +68,49 @@
         methods: {
             ...mapActions('milestone', {
                 addMilestone: 'addMilestone',
+                updateMilestone: 'updateMilestone'
             }),
             ...mapActions('project', {
                 updateProject: 'updateProject',
             }),
-            submitMilestone(){
-                this.milestone.date = Date.parse(this.milestone.date)
-                this.addMilestone(this.milestone)
-                    .then(response => {
-                        consoleLogger.debug(this.project.selected)
-                        let milestoneLinked = this.project.selected.milestones
-                        milestoneLinked.push(response.data._id)
-                        let updateInfos = {
-                            propertyToUpdate: {
-                                milestones: milestoneLinked
-                            },
-                            projectId: this.project.selected._id}
-                        this.updateProject(updateInfos)
-                            .then(response => {
-                                this.$fire({
-                                    type: 'success',
-                                    text: response.statusText
+            submitMilestone() {
+                this.milestoneToSend.date = Date.parse(this.milestoneToSend.date) / 1000
+                if (this.$route.fullPath.includes('edit') === false) {
+                    this.addMilestone(this.milestoneToSend)
+                        .then(response => {
+                            consoleLogger.debug(this.project.selected)
+                            let milestoneLinked = this.project.selected.milestones
+                            milestoneLinked.push(response.data._id)
+                            let updateInfos = {
+                                propertyToUpdate: {
+                                    milestones: milestoneLinked
+                                },
+                                projectId: this.project.selected._id
+                            }
+                            this.updateProject(updateInfos)
+                                .then(response => {
+                                    this.$fire({
+                                        type: 'success',
+                                        text: response.statusText
+                                    })
+                                    this.$router.push('/project/' + this.project.selected._id)
                                 })
-                                this.$router.push('/project/'+this.project.selected._id)
+                        }, error => {
+                            consoleLogger.debug(error)
+                        })
+                }
+                else{
+                    this.updateMilestone(this.milestoneToSend)
+                        .then(response => {
+                            this.$fire({
+                                type: 'success',
+                                text: response.statusText
                             })
-                    }, error => {
-                        consoleLogger.debug(error)
-                    })
+                            this.$router.push('/project/' + this.project.selected._id)
+                        }, error => {
+                            consoleLogger.debug(error)
+                        })
+                }
             }
         }
     }

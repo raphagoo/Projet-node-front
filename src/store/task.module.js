@@ -23,6 +23,27 @@ const actions = {
                 consoleLogger.debug(response)
                 commit('getTasksSuccess', response)
             })
+    },
+    updateTask({commit}, task){
+        return new Promise((resolve, reject) => {
+            api.put('/task/update/'+task._id, task)
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('updateTaskSuccess', response)
+                    resolve(response)
+                }, error => {
+                    reject(error)
+                })
+        })
+    },
+    deleteTask({commit}, task) {
+        api.delete('/task/delete/' + task._id,)
+            .then(response => {
+                consoleLogger.debug(response)
+                commit('deleteTaskSuccess', task)
+            }, error => {
+                consoleLogger.debug(error)
+            })
     }
 };
 
@@ -32,6 +53,12 @@ const mutations = {
     },
     getTasksSuccess(state, response){
         state.all = response.data
+    },
+    updateTaskSuccess(){
+
+    },
+    deleteTaskSuccess(state, task){
+        state.all = state.all.filter(tasks => tasks._id !== task._id)
     }
 };
 export const task = {

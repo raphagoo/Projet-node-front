@@ -25,6 +25,27 @@ const actions = {
                 consoleLogger.debug(response)
                 commit('getMilestonesSuccess', response)
             })
+    },
+    updateMilestone({commit}, milestone){
+        return new Promise((resolve, reject) => {
+            api.put('/milestones/update/'+milestone._id, milestone)
+                .then(response => {
+                    consoleLogger.debug(response)
+                    commit('updateMilestoneSuccess', response)
+                    resolve(response)
+                }, error => {
+                    reject(error)
+                })
+        })
+    },
+    deleteMilestone({commit}, milestone) {
+        api.delete('/milestones/delete/' + milestone._id,)
+            .then(response => {
+                consoleLogger.debug(response)
+                commit('deleteMilestoneSuccess', milestone)
+            }, error => {
+                consoleLogger.debug(error)
+            })
     }
 };
 
@@ -34,6 +55,12 @@ const mutations = {
     },
     getMilestonesSuccess(state, response){
         state.all = response.data
+    },
+    updateMilestoneSuccess(){
+
+    },
+    deleteMilestoneSuccess(state, milestone){
+        state.all = state.all.filter(milestones => milestones._id !== milestone._id)
     }
 };
 export const milestone = {

@@ -38,6 +38,15 @@ const actions = {
                     reject(error)
                 })
         })
+    },
+    deleteGroupTask({commit}, groupTask) {
+        api.delete('/groupTask/delete/' + groupTask._id,)
+            .then(response => {
+                consoleLogger.debug(response)
+                commit('deleteGroupTaskSuccess', groupTask)
+            }, error => {
+                consoleLogger.debug(error)
+            })
     }
 };
 
@@ -49,6 +58,10 @@ const mutations = {
         state.all = response.data
     },
     updateGroupTaskSuccess(){
+
+    },
+    deleteGroupTaskSuccess(state, groupTask){
+        state.all = state.all.filter(groupTaskEach => groupTaskEach._id !== groupTask._id)
     }
 };
 export const groupTask = {
