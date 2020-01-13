@@ -5,7 +5,6 @@ const state = {all: []};
 
 const actions = {
     addTask({commit}, task){
-        console.log(task)
         return new Promise((resolve, reject) => {
             api.post('/task/create', task)
                 .then(response => {

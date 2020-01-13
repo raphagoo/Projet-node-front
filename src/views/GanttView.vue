@@ -1,6 +1,7 @@
 <template>
     <div>
         <router-link to="/" class="text-center"><md-button class="md-icon-button"><md-icon>home</md-icon></md-button></router-link>
+        <h1>{{project.selected.name}}</h1>
         <gantt-elastic :tasks="taskFormatted" :options="options" :dynamic-style="dynamicStyle">
             <gantt-header slot="header"></gantt-header>
         </gantt-elastic>
@@ -16,11 +17,22 @@
             this.project.selected.task.forEach(taskSelected => {
                 taskSelected.start = new Date(taskSelected.start * 1000)
                 taskSelected.end = new Date(taskSelected.end * 1000)
-                taskSelected.label = taskSelected.desc
+                taskSelected.label = taskSelected.name
                 taskSelected.progress = taskSelected.percentageProgress
+                if(taskSelected.linkedTask[0]) {
+                    let taskDependent = []
+                    taskSelected.linkedTask.forEach(task => {
+                        taskDependent.push(task.id)
+                    })
+                    taskSelected.dependentOn = taskDependent
+                }
                 if(taskSelected.ressources[0])
                 {
-                    taskSelected.user = taskSelected.ressources[0].name
+                    let ressourcesDependent = ""
+                    taskSelected.ressources.forEach(ressource => {
+                        ressourcesDependent = ressourcesDependent+" - "+ressource.name
+                    })
+                    taskSelected.user = ressourcesDependent
                 }
                 else{
                     taskSelected.user = "Inconnu"
@@ -32,6 +44,7 @@
                         stroke: taskSelected.color
                     }
                 }
+                console.log(taskSelected)
                 this.taskFormatted.push(taskSelected)
             })
         },
@@ -50,13 +63,13 @@
                 taskFormatted:[],
                 options: {
                     maxRows: 100,
-                    maxHeight: 300,
+                    maxHeight: 500,
                     title: {
                         label: 'Mon gantt',
                         html: false
                     },
                     row: {
-                        height: 50
+                        height: 100
                     },
                     calendar: {
                         hour: {
@@ -107,7 +120,7 @@
                                 id: 5,
                                 label: "Pourcentage réalisé",
                                 value: "progress",
-                                width: 35,
+                                width: 150,
                                 style: {
                                     "task-list-header-label": {
                                         "text-align": "center",
