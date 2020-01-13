@@ -1,7 +1,4 @@
-# vue-starter
-
-vueJs starter kit, is my new webapp starter: initialy I was on the React road, but VueJs took its place...
-
+# Projet node front
 
 [![Dependency Status](https://david-dm.org/raphagoo/Projet-node-front/status.svg)](https://david-dm.org/raphagoo/Projet-node-front#info=dependencies) [![devDependency Status](https://david-dm.org/raphagoo/Projet-node-front/dev-status.svg)](https://david-dm.org/raphagoo/Projet-node-front#info=devDependencies)
 
