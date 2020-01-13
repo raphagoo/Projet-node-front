@@ -56,10 +56,10 @@ export default {
     },
     sockets: {
         connect: function () {
-            console.log('socket connected')
+            consoleLogger.info('socket connected')
         },
         update: function (data) {
-            console.log('La data :', data)
+            consoleLogger.info('La data:', data)
             this.$fire({
                 type: 'success',
                 text: 'Update réussie !'

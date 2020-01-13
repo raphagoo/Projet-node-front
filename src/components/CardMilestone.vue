@@ -48,7 +48,6 @@
         created() {
             if(this.$route.fullPath.includes('edit') === true){
                 this.milestoneToSend = this.milestone.selected
-                console.log(this.milestoneToSend)
             }
             else {
                 this.milestoneToSend = {

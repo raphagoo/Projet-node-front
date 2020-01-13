@@ -72,7 +72,6 @@
         created() {
             if(this.$route.fullPath.includes('edit') === true){
                 this.taskToSend = this.task.selected
-                console.log(this.taskToSend)
             }
             else {
                 this.taskToSend = {

@@ -44,7 +44,6 @@
                         stroke: taskSelected.color
                     }
                 }
-                console.log(taskSelected)
                 this.taskFormatted.push(taskSelected)
             })
         },

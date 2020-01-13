@@ -51,7 +51,6 @@
         created() {
             if(this.$route.fullPath.includes('edit') === true){
                 this.groupTaskToSend = this.groupTask.selected
-                console.log("à savoir",this.groupTask.selected)
             }
             else {
                 this.groupTaskToSend = {

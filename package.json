@@ -1,10 +1,10 @@
 {
-    "name": "vue-starter",
-    "version": "0.1.0",
-    "description": "vueJs starter kit",
+    "name": "projet-node-front",
+    "version": "1.0.0",
+    "description": "Projet node front",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/psancho/vue-starter.git"
+        "url": "git+https://github.com/raphagoo/Projet-node-front.git"
     },
     "keywords": [
         "vue",
@@ -12,7 +12,7 @@
         "eslint",
         "babel"
     ],
-    "author": "Pascal Sancho",
+    "author": "Raphaël Agostini",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/psancho/gotoReact/issues"
